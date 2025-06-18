@@ -1,6 +1,7 @@
 import {User} from "../Models/user.model.js"
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
+import {googleAuth} from "../Utils/googleAuth.js"
 
 const registerUser = async (req,res) => {
     try {
@@ -8,6 +9,11 @@ const registerUser = async (req,res) => {
         if(!fullName || !email || !password) {
             return res.status(400).json({message: "All fields are required", success: false})
         }
+
+        const emailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i;
+        if(!emailRegex.test(email)){
+            return  res.status(400).json({message: "Please check email Format", success: false})
+        } 
     
         const findUser = await User.findOne({email})
         if(findUser){
@@ -19,12 +25,12 @@ const registerUser = async (req,res) => {
             email,
             password
         })
-    
+        
         newUser.password = await bcrypt.hash(password,10)
         const createdUser = await newUser.save()
-    
+        
         if (createdUser) {            
-            return res.status(201).json({message: "User created Successfully", success: true, token: jwtToken})
+            return res.status(201).json({message: "User created Successfully", success: true})
         }
 
     } catch (error) {
@@ -48,7 +54,7 @@ const loginUser = async (req,res) => {
         }
 
         const jwtToken =  jwt.sign(
-            { email: user.email, _id: user._id, fullname: user.fullName },
+            {_id: user._id, fullname: user.fullName, isAdmin: user.isAdmin },
             process.env.JWT_SECRET,
             {expiresIn: '24h'}
         )
@@ -67,7 +73,19 @@ const loginUser = async (req,res) => {
     }
 }
 
+const guestEntry = async (req,res) => {
+    try {
+        const {name, mobile, city, meetWith, purpose, inTime, outTime} = req.body
+        spreadsheetId = '1f32tNX1J8SVMbEnMLzKKfn-uOXK_Vh1xeMoE5ebLs-4'
+        const doc = await googleAuth(spreadsheetId)
+
+    } catch (error) {
+        
+    }
+}
+
 export {
     registerUser,
-    loginUser
+    loginUser,
+    guestEntry
 }
