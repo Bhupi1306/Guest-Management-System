@@ -2,6 +2,7 @@ import {User} from "../Models/user.model.js"
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 import {googleAuth} from "../Utils/googleAuth.js"
+import { GoogleSpreadsheet } from 'google-spreadsheet';
 
 const registerUser = async (req,res) => {
     try {
@@ -74,13 +75,39 @@ const loginUser = async (req,res) => {
 }
 
 const guestEntry = async (req,res) => {
+
+    const today = new Date();
+
+    const day = String(today.getDate()).padStart(2, '0');
+    const month = String(today.getMonth() + 1).padStart(2, '0'); // Month is 0-indexed
+    const year = today.getFullYear();
+
+    const formattedDate = `${day}-${month}-${year}`;
+    console.log(formattedDate); // e.g., "18-06-2025"
     try {
         const {name, mobile, city, meetWith, purpose, inTime, outTime} = req.body
-        spreadsheetId = '1f32tNX1J8SVMbEnMLzKKfn-uOXK_Vh1xeMoE5ebLs-4'
+        const spreadsheetId = '1f32tNX1J8SVMbEnMLzKKfn-uOXK_Vh1xeMoE5ebLs-4'
         const doc = await googleAuth(spreadsheetId)
-
-    } catch (error) {
         
+        let sheet = doc.sheetsByTitle[formattedDate]
+        if(!sheet){
+            sheet = await doc.addSheet({
+                title: formattedDate,
+                headerValues: ["Name","Mobile Number","Visitor's City", "Meeting with", "Purpose of Meeting", "In Time", "Out Time"]
+            })
+        }
+        const addedRow = await sheet.addRow({"Name": name, "Mobile Number": mobile, "Visitor's City": city, "Meeting with": meetWith, "Purpose of Meeting": purpose, "In Time": inTime, "Out Time": outTime})
+
+        if(addedRow){
+            return res.status(201).json({message: "Entry added Successfully", success: true})
+        }
+        else{
+            return res.status(500).json({message: "Entry not added", success: false})
+        }
+        
+        
+    } catch (error) {
+        return res.status(500).json({message: "Internal Server Error", success: false, error})
     }
 }
 
