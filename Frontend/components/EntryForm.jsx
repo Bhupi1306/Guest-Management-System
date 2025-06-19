@@ -57,10 +57,48 @@ export default function EntryForm() {
     setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form Data Submitted:", formData);
-    // Add form submission logic here (e.g., API call)
+    if(!formData.name || !formData.mobile || !formData.city || !formData.meetWith || !formData.purpose || !formData.inTime || !formData.outTime)
+    {
+      alert("All fields are required")
+      return
+    }
+
+      try {
+        const url = `${import.meta.env.VITE_API_BASE_URL}/api/v1/auth/entry`;
+            const response = await fetch(url, {
+                  method: "POST",
+                  headers: {
+                    'content-type':'application/json'
+                  },
+                body: JSON.stringify(formData)
+              })
+              const result = await response.json()
+
+        if(result.success)
+        {
+          setFormData({
+            name: "",
+            mobile: "",
+            city: "",
+            meetWith: "",
+            purpose: "",
+            inTime: "",
+            outTime: ""
+          })
+        }
+
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth"
+        })
+
+        alert(result.message)
+
+      } catch (error) {
+        alert("Something went wrong")
+      }
     };
 
     return (

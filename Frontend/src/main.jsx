@@ -28,6 +28,17 @@ createRoot(document.getElementById('root')).render(
           />
         } />
 
+        <Route path = "/" 
+          element={
+            <Form 
+            fullName={false}
+            backendUrl={`${import.meta.env.VITE_API_BASE_URL}/api/v1/auth/login`}
+            type="Login"
+            headerText="Login"
+          />
+          }
+        />
+
       <Route path="/home" 
         element={
           <EntryForm />

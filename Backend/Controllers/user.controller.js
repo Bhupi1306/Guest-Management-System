@@ -83,7 +83,6 @@ const guestEntry = async (req,res) => {
     const year = today.getFullYear();
 
     const formattedDate = `${day}-${month}-${year}`;
-    console.log(formattedDate); // e.g., "18-06-2025"
     try {
         const {name, mobile, city, meetWith, purpose, inTime, outTime} = req.body
         const spreadsheetId = '1f32tNX1J8SVMbEnMLzKKfn-uOXK_Vh1xeMoE5ebLs-4'

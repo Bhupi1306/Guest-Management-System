@@ -81,7 +81,6 @@ const Form = ({fullName = true, backendUrl = "", type="", headerText=""}) => {
 
         
         try {
-            console.log(import.meta.env.VITE_API_BASE_URL);
             const url = backendUrl;
             const response = await fetch(url, {
                   method: "POST",
