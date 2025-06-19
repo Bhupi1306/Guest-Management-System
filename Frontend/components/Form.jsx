@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import logo from "../src/assets/react.svg";
+import logo from "../src/assets/logo.jpg";
 import Navbar from "./Navbar";
 
 
