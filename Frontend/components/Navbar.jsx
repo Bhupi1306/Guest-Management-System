@@ -64,19 +64,19 @@ export default function Navbar() {
     {showNav && (
     <nav className="bg-white shadow-md px-6 flex justify-between items-center">
       <div className="text-2xl font-semibold text-blue-600" onClick={() => {navigate('/home')}}>
-        <img src={logo} alt="Logo" className="h-18" />
+        <img src={logo} alt="Logo" className="md:h-18 sm:h-15 h-15" />
         </div>
 
       <div className="space-x-5">
         {newUser &&(<button
           onClick={handleNewUser}
-          className="px-4 py-2 rounded-xl bg-blue-500 text-white hover:bg-blue-600 transition"
+          className="md:px-4 md:py-2 px-2 py-1 rounded-xl bg-blue-500 text-white hover:bg-blue-600 transition"
         >
           New User
         </button>)}
         <button
           onClick={handleLogout}
-          className="px-4 py-2 rounded-xl bg-blue-500 text-white hover:bg-blue-600 transition"
+          className="md:px-4 md:py-2 px-2 py-1 rounded-xl bg-blue-500 text-white hover:bg-blue-600 transition"
         >
           Logout
         </button>
