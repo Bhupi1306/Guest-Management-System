@@ -62,7 +62,7 @@ export default function Navbar() {
     <>
     {showNav && (
     <nav className="bg-white shadow-md px-6 py-4 flex justify-between items-center">
-      <div className="text-2xl font-semibold text-blue-600" onClick={navigate('/home')}>LOGO</div>
+      <div className="text-2xl font-semibold text-blue-600" onClick={() => {navigate('/home')}}>LOGO</div>
 
       <div className="space-x-5">
         {newUser &&(<button
